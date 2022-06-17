@@ -1,0 +1,270 @@
+{% extends "layouts/base.html" %}
+{% load humanize %}
+
+{% block title %}detail{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css"/>
+
+<style>
+    .swiper {
+  width: 600px;
+  height: 300px;
+}
+.swiper-button-prev{
+    margin-top: -20px;
+}
+#content-wrapper{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+}
+
+.column{
+	width: 600px;
+	padding: 10px;
+
+}
+
+#featured{
+	max-width: 500px;
+	max-height: 600px;
+	object-fit: cover;
+	cursor: pointer;
+
+}
+
+.thumbnail{
+	object-fit: cover;
+	max-width: 180px;
+	max-height: 100px;
+	cursor: pointer;
+	opacity: 0.5;
+	margin: 5px;
+
+}
+
+.thumbnail:hover{
+	opacity:1;
+}
+
+.active{
+	opacity: 1;
+}
+
+#slide-wrapper{
+	max-width: 500px;
+	display: flex;
+	min-height: 100px;
+	align-items: center;
+}
+
+#slider{
+	width: 440px;
+	display: flex;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+
+}
+
+#slider::-webkit-scrollbar {
+		width: 8px;
+
+}
+
+#slider::-webkit-scrollbar-thumb {
+  background-color: #CDCDCD;
+   border-radius: 100px;
+
+}
+
+#slider::-webkit-scrollbar-thumb:hover{
+    background-color: #18b5ce;
+}
+
+.arrow{
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+	transition: .3s;
+}
+
+.arrow:hover{
+	opacity: .5;
+	width: 35px;
+	height: 35px;
+}
+a{
+        color: #FF8C00;
+}
+.breadcrumb {
+    background-color: #FFF !important;
+}
+*, ::after, ::before {
+    box-sizing: none !important;
+}
+
+</style>
+<br>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">หน้าแรก</a></li>
+      <li class="breadcrumb-item active" aria-current="page">รายชื่อสินค้า ({{ product.p_name }})</li>
+    </ol>
+</nav>
+<div style='overflow-x:auto'>
+    <div class="card container">
+    <br> 
+        <div class="row" style='overflow-x:auto'>
+            <div class="col md-4">
+                <div class="card-img-top img-fluid col-md-9 p-4" style="width: 600px;">
+                    <!----------------->
+                    <div id="content-wrapper">
+                        <div class="column" style="margin-left:150px">
+                            {% if product.p_image %}
+                                <img src="{{ product.p_image.url }}" id="featured" style="margin-left: 50px; height: 300px; width: 430px; " class="img-fluid" >
+                            {% else %}
+                                <br><span>ขออภัยไม่มีรูปภาพแสดง</span>
+                            <div class="mtop"></div>
+                            {% endif %}
+                            <hr>
+                            <div id="slide-wrapper" >
+                                <a id="slideLeft" class="arrow" ><</a>
+
+                                <div id="slider">
+                                {% for pi in product.productimage_set.all %}
+                                    <br><br>
+                                    <div class="float-sm-start ml-4">
+                                        <img src="{{ pi.image.url }}" id="sliderimag{{ forloop.counter }}" class="thumbnail active" alt="" style="height: 100px; width: 90px; ">
+                                    </div>
+                                {% endfor %}
+                                </div>
+                            <a id="slideRight" value="1" class="arrow" > &nbsp;&nbsp;&nbsp;></a>
+                            <input type="hidden" value="1" id="test">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <hr>
+            </div>
+            <div class="col md-6 mt-2">
+                <h3>ชื่อสินค้า : {{ product.p_name }}</h3><hr>
+                <h5>หมวดหมู่สินค้า: {{ product.p_category }}</h5>
+                <h5 class= mt-3>ราคาสินค้า : {{ product.p_price|floatformat:2|intcomma }}</h5>
+                <p >รายละเอียดสินค้า : {{ product.p_description }}</p>
+                <hr>
+                <h3>หนังสือแนะนำ</h3>
+                {% for r in productrecommend %}
+                    <h5><a href="{% url 'productdetail' slug=r.p_slug %}"><li>{{ r.p_name }}</li></a></h5>
+                {% endfor %}
+                <hr class="hrwidth">
+                <br>
+            </div>
+        </div>
+        <h3 align="center">Comment ({{product.get_comment_count}})</h3>
+        {% for c in product.commentproduct_set.all %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>รายละเอียด: {{ c.comment_comment }}</h5>
+                <div>คะแนน: {{ c.comment_rating }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+     
+
+<br>
+<a href="{% url 'home' %}" class="d-flex justify-content-center">กลับสู่หน้าหลัก</a>
+
+<br><br>
+
+<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
+
+<script>
+$( document ).ready(function() {
+    $('.swiper-button-next').css({'color': '#fff'});
+    $('.swiper-button-prev').css({'color': '#fff'});
+    $(".swiper-button-next").hover(function() {
+        $(this).css("color","#D3D3D3")
+    });
+    $(".swiper-button-prev").hover(function() {
+        $(this).css("color","#D3D3D3")
+    });
+
+    $("#slideRight").click(function(){
+    var imgg = parseInt($('#test').val())
+    var srcImg = $('#sliderimag' + (imgg+1)).attr('src')
+    $('#featured').attr('src' ,srcImg)
+    $('#test').val(imgg+1)
+
+
+});
+
+$("#slideLeft").click(function(){
+    var imgg = parseInt($('#test').val())
+    var srcImg = $('#sliderimag' + (imgg-1)).attr('src')
+    $('#featured').attr('src' ,srcImg)
+    $('#test').val(imgg-1)
+});
+setInterval(function(){ 
+    console.log(1)
+    $('#slideRight').trigger('click');
+}, 5000);
+});
+const swiper = new Swiper('.swiper', {
+  loop: true,
+
+  // If we need pagination
+  pagination: {
+    el: '.swiper-pagination',
+  },
+
+  // Navigation arrows
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+
+ 
+});
+
+
+</script>
+
+<script type="text/javascript">
+    let thumbnails = document.getElementsByClassName('thumbnail')
+
+    let activeImages = document.getElementsByClassName('active')
+
+    for (var i=0; i < thumbnails.length; i++){
+
+        thumbnails[i].addEventListener('mouseover', function(){
+            console.log(activeImages)
+            
+            if (activeImages.length > 0){
+                activeImages[0].classList.remove('active')
+            }
+            
+
+            this.classList.add('active')
+            document.getElementById('featured').src = this.src
+        })
+    }
+
+    let buttonRight = document.getElementById('slideRight');
+    let buttonLeft = document.getElementById('slideLeft');
+
+    buttonLeft.addEventListener('click', function(){
+        document.getElementById('slider').scrollLeft -= 180
+    })
+
+    buttonRight.addEventListener('click', function(){
+        document.getElementById('slider').scrollLeft += 180
+    })
+    
+</script>
+{% endblock %}
+

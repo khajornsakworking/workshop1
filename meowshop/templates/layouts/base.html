@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css" integrity="sha384-VCmXjywReHh4PwowAiWNagnWcLhlEJLA5buUprzK8rxFgeH0kww/aWY76TfkUoSX" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <title>{% block title %}Meow Shop{% endblock %}</title>
+    
+
+  </head>
+  <body>
+    <nav class="my-2 my-md-0 fixed-top" style="background-color: #FF7F50;">
+        <div class="container-fluid">
+        <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3  border-bottom " style="background-color: #FF7F50;"> 
+            <h5 class="my-0 mr-md-auto font-weight-normal text-light"><b>MEOW SHOP</b> <i class="fa fa-shopping-bag" style="color: white;"></i></h5> 
+                
+                <a class="p-2 text-light" href="{% url 'home' %}">หน้าแรก</a>
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle text-light" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      หมวดหมู่
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {% for c in categories %}
+                      <a class="dropdown-item" href="{% url 'home' %}?category={{ c.id }}">{{ c.c_name }}</a>
+                    {% endfor %}
+                    </div>
+                  </div>
+                <a class="p-2 text-light" href="{% url 'contact' %}">ติดต่อ</a><i class="fa fa-phone" aria-hidden="true" style="color: white;"></i>
+                <!--search-->
+                <form action="{% url 'search' %}" class="form-inline ml-3", method="GET">
+                    <div class="input-group">
+                        <input type="text" name="key" class="form-control" placeholder="Search">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-warning"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <br><br><br><br>
+    <div class="container-fluid">
+        {% if messages %}
+        {% for msg in messages %}
+            {% if msg.tags == 'success' %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Success</strong> {{ msg }}
+                <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+
+            {% if msg.tags == 'error' %}
+            <div class="alert alert-danger alert-dismissible fade show" id = "closee" role="alert">
+                <strong>Error</strong> {{ msg }}
+                <button type="button"  class="close" data-bs-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+
+        {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+    <!--footer-->
+   <br><footer class="text-center text-lg-start " style="background-color: #FF7F50;">
+        <!-- Copyright -->
+        <div class="text-center p-3" >
+            Copyright © 2020 Intellingent Bytes Co., Ltd. All Rights Reserved
+        </div>
+        
+        <!-- Copyright -->
+      </footer>
+        
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/js/bootstrap.min.js" integrity="sha384-XEerZL0cuoUbHE4nZReLT7nx9gQrQreJekYhJD9WNWhH8nEW+0c5qq7aIo2Wl30J" crossorigin="anonymous"></script>
+  </body>
+</html>

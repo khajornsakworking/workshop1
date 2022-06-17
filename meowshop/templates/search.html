@@ -1,0 +1,76 @@
+{% extends "layouts/base.html" %}
+{% load humanize %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<style>
+    a{
+        color: #FF8C00;
+    }
+    .t{
+        height: 450px;
+    }
+    .mtop{
+        margin-top: 180px;
+    }
+    .centerpagination{
+        align-items: center;
+    }
+    .page-link{
+        color: chocolate;
+    }
+    .texalign{
+        text-align: center;
+    }
+    .breadcrumb {
+        background-color: #FFF !important;
+    }
+    .btn-info:hover {
+        color: #fff;
+        background-color: #FFA07A !important;
+        border-color: #FFA07A !important;
+    }
+    .btn-info {
+        color: #fff;
+        background-color: #FF7F50 ;
+        border-color: #FF7F50 ;
+    }
+</style>
+<div>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">ค้นหารายการสินค้า</li>
+        </ol>
+    </nav>
+        <h3 align="center ">ผลการค้นหา <span>"{% if request.GET.key %} {{request.GET.key}}"</span>{% else %}<span>ทั้งหมด"</span>{% endif %}</h3>
+        <hr>
+        <h5>รายการสินค้า</h5>
+
+    <div class="row">
+        {% for p in searchproduct %}
+            <div class="col-lg-3 mt-4">
+                <div class="card t">
+                    {% if p.p_image %}
+                    <a href="{% url 'productdetail' slug=p.p_slug %}">
+                        <img src="{{ p.p_image.url }}" alt="" class="card-img-top" height="230" width="200">
+                    </a>
+                    {% else %}
+                    <br><span class="texalign">ขออภัยไม่มีรูปภาพแสดง</span>
+                        <div class="mtop"></div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5><a href="{% url 'productdetail' slug=p.p_slug %}">ชื่อสินค้า : {{ p.p_name }}</a></h5>
+                        <div>หมวดหมู่สินค้า : {{ p.p_category.c_name }}</div>
+                        <div>ราคาสินค้า : {{ p.p_price|floatformat:2|intcomma }}</div>
+                        <a href="{% url 'productdetail' slug=p.p_slug %}" class="btn btn-info mt-4">รายละเอียดสินค้า</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    <div>
+</div>
+<br><br><br><br><br>
+{% endblock %}
+
